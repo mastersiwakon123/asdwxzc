@@ -2,46 +2,21 @@ import discord
 from discord.ext import commands
 import datetime
 import os
-from myserver import server_on
-from dotenv import load_dotenv
+from dotenv import load_dotenv  # ใช้ dotenv เพื่อโหลดโทเค็นจากไฟล์ .env
 
-# โหลดข้อมูลจากไฟล์ .env
+# โหลดโทเค็นจากไฟล์ .env
 load_dotenv()
-
-# รับค่า Token จาก environment variable
-TOKEN = os.getenv('TOKEN')
-
-# ตรวจสอบว่า TOKEN มีค่าไหม
-if not TOKEN:
-    print("Token not found! Please make sure to set the TOKEN environment variable.")
-    exit()
 
 intents = discord.Intents.default()
 intents.message_content = True
 
-# สร้างคลาส bot
 client = commands.Bot(command_prefix="!", intents=intents)
 
-# สร้างคลาสสำหรับปุ่ม
-class MyView(discord.ui.View):
-    def __init__(self):
-        super().__init__()
-
-    # ปุ่ม "ใส่โทเค่น"
-    @discord.ui.button(label="ใส่โทเค่น", style=discord.ButtonStyle.green)
-    async def token_button(self, button: discord.ui.Button, interaction: discord.Interaction):
-        await interaction.response.send_message("กรุณาใส่โทเค่นที่ต้องการใช้งาน", ephemeral=True)
-
-    # ปุ่ม "เริ่ม"
-    @discord.ui.button(label="เริ่ม", style=discord.ButtonStyle.blue)
-    async def start_button(self, button: discord.ui.Button, interaction: discord.Interaction):
-        await interaction.response.send_message("เริ่มทำงานแล้ว!", ephemeral=True)
-        
 @client.event
 async def on_ready():
     print(f"{client.user} is online!")
 
-    # สร้าง Rich Presence
+    # Rich Presence
     activity = discord.Activity(
         type=discord.ActivityType.streaming,
         name="Meoaw Hub",  # เปลี่ยนได้
@@ -50,7 +25,6 @@ async def on_ready():
         state="สถานะ: :zaved: เปิดร้าน !",  # เปลี่ยนได้
         start=datetime.datetime.utcnow(),
     )
-
     await client.change_presence(activity=activity)
 
     # Rich Presence Assets (รูปภาพใหญ่และเล็ก)
@@ -67,15 +41,15 @@ async def on_ready():
         url="https://www.youtube.com/watch?v=g88A3mmF3A0",
     )
 
-    # ตั้งค่าภาพใหญ่และเล็ก
     await client.change_presence(activity=r)
 
-    # ส่งข้อความพร้อมปุ่ม
-    channel = client.get_channel(1297932056562761869)  # เปลี่ยนเป็น ID ของช่องที่ต้องการให้บอทส่งข้อความไป
-    view = MyView()
-    await channel.send("คลิกปุ่มเพื่อเริ่มหรือใส่โทเค่น", view=view)
+    # ปุ่ม "เริ่ม" สำหรับการเริ่มการทำงาน
+    class MyView(discord.ui.View):
+        @discord.ui.button(label="เริ่ม", style=discord.ButtonStyle.primary)  # ใช้ primary แทน blue
+        async def start_button(self, button: discord.ui.Button, interaction: discord.Interaction):
+            await interaction.response.send_message("เริ่มการทำงานแล้ว!")
 
-    server_on()
+    # สร้าง view และส่งปุ่มไปที่ Discord
+    await client.get_channel(1297932056562761869).send("กดปุ่มเริ่ม:", view=MyView())
 
-# เริ่มบอทด้วย Token ที่ได้จาก .env
-client.run(TOKEN)
+client.run(os.getenv('TOKEN'))  # ใช้โทเค็นจากไฟล์ .env
