@@ -20,7 +20,7 @@ class MyView(View):
         super().__init__(timeout=180)  # ตั้งเวลาให้หมดอายุหลัง 180 วินาที
 
     # ปุ่มกรอกโทเค็น
-    @discord.ui.button(label="กรอกโทเค็น", style=discord.ButtonStyle.green)
+    @discord.ui.button(label="กรอกโทเค็น", style=discord.ButtonStyle.primary)  # เปลี่ยนเป็น primary
     async def token_button(self, interaction: Interaction, button: discord.ui.Button):
         # แสดงฟอร์มกรอกโทเค็น
         await interaction.response.send_message("กรุณากรอกโทเค็นของคุณ:", ephemeral=True)
@@ -34,7 +34,7 @@ class MyView(View):
         await interaction.response.send_modal(modal)
 
     # ปุ่มกรอกรูปลิ้งค์
-    @discord.ui.button(label="กรอกรูปลิ้งค์", style=discord.ButtonStyle.blue)
+    @discord.ui.button(label="กรอกรูปลิ้งค์", style=discord.ButtonStyle.success)  # เปลี่ยนเป็น success
     async def link_button(self, interaction: Interaction, button: discord.ui.Button):
         # แสดงฟอร์มกรอกรูปลิ้งค์
         await interaction.response.send_message("กรุณากรอกลิ้งค์รูปภาพของคุณ:", ephemeral=True)
