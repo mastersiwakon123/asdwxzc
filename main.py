@@ -4,6 +4,7 @@ from discord.ui import Button, View, TextInput
 from discord import Interaction
 import os
 from dotenv import load_dotenv
+import datetime
 
 # โหลดโทเค็นจากไฟล์ .env
 load_dotenv()
@@ -52,6 +53,12 @@ class MyView(View):
         # ส่งข้อความยืนยันการเริ่มทำงาน
         await interaction.response.send_message("เริ่มการทำงานแล้ว!")
 
+# คำสั่ง !start เพื่อเริ่มการทำงาน
+@client.command()
+async def start(ctx):
+    view = MyView()
+    await ctx.send("กรุณากรอกข้อมูลโทเค็นหรือกรอกรูปลิ้งค์", view=view)
+
 @client.event
 async def on_ready():
     print(f"{client.user} is online!")
@@ -82,9 +89,5 @@ async def on_ready():
     )
 
     await client.change_presence(activity=r)
-
-    # ส่งข้อความพร้อมปุ่ม
-    channel = client.get_channel(1297932056562761869)  # ใส่ Channel ID ของคุณที่ต้องการให้บอทส่งข้อความ
-    await channel.send("กรุณากรอกข้อมูลโทเค็นหรือกรอกรูปลิ้งค์", view=MyView())
 
 client.run(os.getenv('TOKEN'))  # ใช้โทเค็นจากไฟล์ .env
