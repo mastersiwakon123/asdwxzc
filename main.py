@@ -46,7 +46,8 @@ async def on_ready():
     # ปุ่ม "เริ่ม" สำหรับการเริ่มการทำงาน
     class MyView(discord.ui.View):
         @discord.ui.button(label="เริ่ม", style=discord.ButtonStyle.primary)  # ใช้ primary แทน blue
-        async def start_button(self, button: discord.ui.Button, interaction: discord.Interaction):
+        async def start_button(self, interaction: discord.Interaction, button: discord.ui.Button):
+            # ใช้ interaction เพื่อส่งข้อความ
             await interaction.response.send_message("เริ่มการทำงานแล้ว!")
 
     # สร้าง view และส่งปุ่มไปที่ Discord
