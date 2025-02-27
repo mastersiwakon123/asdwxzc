@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from discord.ui import Button, View, TextInput
+from discord.ui import Button, View, TextInput, Modal
 from discord import Interaction
 import os
 from dotenv import load_dotenv
@@ -20,28 +20,26 @@ class MyView(View):
         super().__init__(timeout=180)  # ตั้งเวลาให้หมดอายุหลัง 180 วินาที
 
     # ปุ่มกรอกโทเค็น
-    @discord.ui.button(label="กรอกโทเค็น", style=discord.ButtonStyle.primary)  # เปลี่ยนเป็น primary
+    @discord.ui.button(label="กรอกโทเค็น", style=discord.ButtonStyle.primary)
     async def token_button(self, interaction: Interaction, button: discord.ui.Button):
         # แสดงฟอร์มกรอกโทเค็น
-        await interaction.response.send_message("กรุณากรอกโทเค็นของคุณ:", ephemeral=True)
+        modal = Modal(title="กรอกโทเค็น", custom_id="token_modal")
 
         # สร้าง TextInput ให้กรอกโทเค็น
         token_input = TextInput(label="กรุณากรอกโทเค็น", placeholder="ใส่โทเค็นที่นี่")
-        modal = discord.ui.Modal(title="กรอกโทเค็น", custom_id="token_modal")
         modal.add_item(token_input)
 
         # รอรับการกรอกข้อมูล
         await interaction.response.send_modal(modal)
 
     # ปุ่มกรอกรูปลิ้งค์
-    @discord.ui.button(label="กรอกรูปลิ้งค์", style=discord.ButtonStyle.success)  # เปลี่ยนเป็น success
+    @discord.ui.button(label="กรอกรูปลิ้งค์", style=discord.ButtonStyle.success)
     async def link_button(self, interaction: Interaction, button: discord.ui.Button):
         # แสดงฟอร์มกรอกรูปลิ้งค์
-        await interaction.response.send_message("กรุณากรอกลิ้งค์รูปภาพของคุณ:", ephemeral=True)
+        modal = Modal(title="กรอกรูปลิ้งค์", custom_id="link_modal")
 
         # สร้าง TextInput ให้กรอกลิ้งค์รูปภาพ
         link_input = TextInput(label="กรุณากรอกลิ้งค์รูป", placeholder="ใส่ลิ้งค์รูปที่นี่")
-        modal = discord.ui.Modal(title="กรอกรูปลิ้งค์", custom_id="link_modal")
         modal.add_item(link_input)
 
         # รอรับการกรอกข้อมูล
